@@ -139,7 +139,7 @@ file("prova_lake.pkl").
 > **Nota:** ricordati che Lake ha una dimensione piccolo, quindi Step = 100 è perfetto per allenare il modello, invece Taxi ha una dimensione grande, quindi ci servono uno Step alto, se no, non riuscirà a finire un intero episode raggiungendo l'obbiettivo
 
 **Osservazione**
-- **FrozenLake-v1** ha solo un reward = 1, qaundo raggiunge il goal, in altri casi, anche quando cade nel buco, il reward è sempre = 0
+- **FrozenLake-v1** ha solo un reward = 1, quando raggiunge il goal, in altri casi, anche quando cade nel buco, il reward è sempre = 0
 - **Taxi-v3** ogni passo ha sempre una sanzione di reward negativo, solo quando raggiunge il suo obbiettivo avrà reward positivo
 
 ## Struttura_Project
@@ -161,7 +161,7 @@ file("prova_lake.pkl").
         agents: agent_learn;
       }
       ```
-  - **build.gradle **   settings.gradle  ->  file configurazione per gradle
+  - **build.gradle   settings.gradle**  ->  file configurazione per gradle
   - **drive_gym.py**  ->  file eseguibile per Python
   - **.pkl**  ->  due file di modello allenato per i due ambienti Gymnasium
   - **view_file**  ->  file java per visualizzazione Q-Table degli modelli .pkl
