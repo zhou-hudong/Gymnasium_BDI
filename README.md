@@ -82,9 +82,9 @@ Per eseguire correttamente il progetto, assicurati di avere installato e configu
     - Se non voui eseguire con questi comandi, ti consiglio di usare **PyCharm**, come nella mia situazione
 
 6. **Dipendenze Python**  
-   - Installa Time, Gymnasium e Py4J:  
+   - Installa Gymnasium e Py4J:  
      ```bash
-     pip install time gymnasium py4j
+     pip install gymnasium py4j
      ```  
 
 7. **Configurazione porte Py4J**  
@@ -96,7 +96,7 @@ Per eseguire correttamente il progetto, assicurati di avere installato e configu
 ## Run_Project
 
   - Apri **git bash** (caso Windows)
-  - git clone https://github.com/zhou-hudong/Gymnasium_BDI
+  - git clone https://github.com/zhou-hudong/Gymnasium_BDI.git
   - cd Gymnasium_BDI
   - jason app1.mas2j
     - aprirà la finestra MAS Console, per visualizzare Output e visualizzare Debug
