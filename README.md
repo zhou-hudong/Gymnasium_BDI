@@ -37,6 +37,61 @@ Questa soluzione consente di esplorare scenari di apprendimento per rinforzo man
 
 ## Ambiente
 
+Per eseguire correttamente il progetto, assicurati di avere installato e configurato i seguenti strumenti:
+
+1. **Java 17+**  
+   - Verifica la versione con  
+     ```bash
+     java -version
+     ```
+   - Se non lo hai, scaricalo dal sito ufficiale
+
+2. **Jason (Jason Interpreter & IDE)**  
+   - Jason è il motore BDI per ASL.  
+   - Scaricalo dal repository ufficiale GitHub:  
+     https://github.com/jason-lang/jason  
+   - Segui le istruzioni in `README.md` del progetto per l’installazione e il lancio dell’interprete.
+   - Se sei in Windows, scarica **git bash** per eseguire i comandi *jason* e *clone repository*
+
+3. **Gradle**  
+   - Usato per compilare e costruire la libreria Java–Py4J–Jason.  
+   - Se installi Jason via GitHub, Gradle è già incluso nella cartella `tools/gradle`.  
+   - Puoi anche installarlo globalmente seguendo le istruzioni:  
+     https://gradle.org/install/
+
+4. **Visual Studio Code** (o altro IDE a piacere)  
+   - Estensioni consigliate:  
+     - **Language Support for Java™ by Red Hat**  
+     - **Gradle for Java**  
+     - **Python**  
+   - Imposta il workspace radice del repository per editing rapido di ASL, Java e Python.
+   - Oppure puoi aprire la cartella invocando **code .** su **git bash**, che ti aprirà direttamente la cartella come workspace in **Visual Studio Code**
+
+5. **Python 3.8+**  
+   - Verifica con  
+     ```bash
+     python --version
+     ```  
+   - Crea un virtual environment (consigliato):  
+     ```bash
+     python -m venv .venv
+     source .venv/bin/activate   # Linux/Mac
+     .venv\Scripts\activate      # Windows
+     ```
+    - Se non voui eseguire con questi comandi, ti consiglio di usare **PyCharm**, come nella mia situazione
+
+6. **Dipendenze Python**  
+   - Installa Time, Gymnasium e Py4J:  
+     ```bash
+     pip install time gymnasium py4j
+     ```  
+
+7. **Configurazione porte Py4J**  
+   - Di default:  
+     - **JavaGateway** su porta `25333`  
+     - **CallbackServer** su porta `25334`  
+   - Assicurati che non siano in uso o modificane i valori in `drive_gym.py` e in `Env.java`.
+
 ## Run_Project
 
 ## Code
@@ -48,8 +103,10 @@ Questa soluzione consente di esplorare scenari di apprendimento per rinforzo man
 ## Note
 
 Puoi osservare che in modalità ansi, la velocità di learning non era molto veloce, era perchè ho aggiunto un spleep, per evitare che **py4j** si blocchi il taffico di comunicazione tra **java** e **python**
-> **Python**
-> def step(self, action: int):
->   ...
->   time.sleep(0.2)
->   ...
+**Python**
+'''python
+def step(self, action: int):
+   ...
+   time.sleep(0.2)
+   ...
+'''
