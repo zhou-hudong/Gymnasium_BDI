@@ -51,6 +51,7 @@ Per eseguire correttamente il progetto, assicurati di avere installato e configu
    - Scaricalo dal repository ufficiale GitHub:  
      https://github.com/jason-lang/jason  
    - Segui le istruzioni in `README.md` del progetto per l’installazione e il lancio dell’interprete.
+   - Nella cartella **examples** ci sono esempi di jason project
    - Se sei in Windows, scarica **git bash** per eseguire i comandi *jason* e *clone repository*
 
 3. **Gradle**  
@@ -94,19 +95,98 @@ Per eseguire correttamente il progetto, assicurati di avere installato e configu
 
 ## Run_Project
 
+  - Apri **git bash** (caso Windows)
+  - git clone https://github.com/zhou-hudong/Gymnasium_BDI
+  - cd Gymnasium_BDI
+  - jason app1.mas2j
+    - aprirà la finestra MAS Console, per visualizzare Output e visualizzare Debug
+    - All'inizio aspetterà il Run della parte Python
+  - Open PyCharm an Run drive_gym.py
+    - Java - Python si connette, e parte il programma
+
 ## Code
 
 ## Configurazione
 
+Come possiamo vedere, ci sono 4 parti di configurazione:
+  - Elementi per proseguire la formula di Q-Learning
+  - Elementi di configurazione per Gymnasium
+  - Max Steps
+  - Max Episode
+  - Nome del File di Q-Table dove salviamo e carichiamo
+
+```java
+/* 1. Configurazione */
+learning_rate(0.1).
+discount_factor(0.2).
+epsilon(1).
+epsilon_decay(0.995).
+
+//name_game("FrozenLake-v1").
+name_game("Taxi-v3").
+//render_mode("human").
+render_mode("ansi").
+
+max_episode_steps(100).
+//max_episode_steps(500).
+
+episode_count(500).
+
+file("prova_lake.pkl").
+//file("prova_taxi.pkl").
+```
+
+> **Nota:** ricordati che Lake ha una dimensione piccolo, quindi Step = 100 è perfetto per allenare il modello, invece Taxi ha una dimensione grande, quindi ci servono uno Step alto, se no, non riuscirà a finire un intero episode raggiungendo l'obbiettivo
+
+**Osservazione**
+- **FrozenLake-v1** ha solo un reward = 1, qaundo raggiunge il goal, in altri casi, anche quando cade nel buco, il reward è sempre = 0
+- **Taxi-v3** ogni passo ha sempre una sanzione di reward negativo, solo quando raggiunge il suo obbiettivo avrà reward positivo
+
 ## Struttura_Project
+
+**Cartella：**
+  - **.gradle  .idea  build**  ->  sono 3 cartelle create automaticamente dai comandi gradle e jason
+  - **env** ->  cartella dove contiene il nostro Java Enviroment
+    - **Env.java**  ->  Java Enviroment
+    - **IPyEnv.java**  -> interfaccia Server Java-Python
+
+**File**
+  - **agent.asl**  ->  agente senza procedimento learn, carica modello ed esegue
+  - **agent_learn.asl**  ->  agente con procedimento learn per allenare l modello
+  - **app1.mas2j**  ->  file eseguibile per Jason
+    - Per modificare Agent, devi cambiare il nome del file
+      ```java
+      MAS app1 {
+        ...
+        agents: agent_learn;
+      }
+      ```
+  - **build.gradle **   settings.gradle  ->  file configurazione per gradle
+  - **drive_gym.py**  ->  file eseguibile per Python
+  - **.pkl**  ->  due file di modello allenato per i due ambienti Gymnasium
+  - **view_file**  ->  file java per visualizzazione Q-Table degli modelli .pkl
+    - procrdimento di visualizzazione:
+      - javac view_file.java
+      - java view_file
+    - Per cambiare file .pkl da visualizzare, devi modificare il FILE_PATH:
+      ```java
+        FILE_PATH = "prova.pkl"
+      ```
 
 ## Note
 
-Puoi osservare che in modalità ansi, la velocità di learning non era molto veloce, era perchè ho aggiunto un spleep, per evitare che **py4j** si blocchi il taffico di comunicazione tra **java** e **python**
+1. Puoi osservare che in modalità ansi, la velocità di learning non era molto veloce, era perchè ho aggiunto un spleep, per evitare che **py4j** si blocchi il taffico di comunicazione tra **java** e **python**
 **Python**
-'''python
+```python
 def step(self, action: int):
    ...
    time.sleep(0.2)
    ...
-'''
+```
+
+2. In Agent File, abbiamo una conversione di Source[Percept], da Percept a Self, questa conversione serve per evitare la cancellazione del Q-Table Belief del Agent da parte Java con "clearPercepts()"
+   ```java
+   +qtable(S,A,R)[source(percept)]<-
+     +qtable(S,A,R)[source(self)];
+     -qtable(S,A,R)[source(percept)].
+   ```
