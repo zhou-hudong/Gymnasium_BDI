@@ -21,15 +21,15 @@ This project integrates a **BDI (Belief–Desire–Intention) agent** written in
 
 - **Episode Workflow**  
   1. **reset_env** (Java → Python): Initializes the environment.
-  2. Python returns 'newState(state, reward, done)'.  
-  3. The BDI agent receives 'newState(state, reward, done)', updates the Q-table '(!learn)' e and selects the next action '(!selectAction)'.
+  2. Python returns `newState(state, reward, done)`.  
+  3. The BDI agent receives 'newState(state, reward, done)', updates the Q-table `(!learn)` e and selects the next action `(!selectAction)`.
   4. **step_env(action)** (Java → Python): Sends the next action to the environment.
-  5. Repeats until 'done = true' (end of episode).
+  5. Repeats until `done = true` (end of episode).
 
 - **Key Features**  
-  - Automatic calculation of 'num_states' and 'num_actions' from Gymnasium.
-  - Support for rendering modes: 'human' (graphical) and 'ansi' (text-based). 
-  - Save/load Q-table as '.pkl' to resume or analyze learning sessions.
+  - Automatic calculation of `num_states` and `num_actions` from Gymnasium.
+  - Support for rendering modes: `human` (graphical) and `ansi` (text-based). 
+  - Save/load Q-table as `.pkl` to resume or analyze learning sessions.
   - ASL-based configuration for: learning rate, discount factor, ε-decay, episodes, steps, and game environment.
 
 This solution allows to explore reinforcement learning scenarios while maintaining a clear separation between **BDI strategy** and **environmental dynamics**, facilitating extensions to new Gymnasium games with minimal changes in the ASL configuration. 
@@ -64,7 +64,7 @@ To run the project correctly, make sure you have the following tools installed a
      - **Gradle for Java**  
      - **Python**  
    - Set up the root workspace of the repository for fast editing of ASL, Java and Python.
-   - Or Open project folder via 'code .' in **Git Bash (Windows)**.
+   - Or Open project folder via `code .` in **Git Bash (Windows)**.
 
 5. **Python 3.8+**  
    - Check with
@@ -104,7 +104,7 @@ To run the project correctly, make sure you have the following tools installed a
     # Waits for Python side to connect
     ```
   - Open PyCharm an Run drive_gym.py
-    - Or with command 'python drive_gym.py'
+    - Or with command `python drive_gym.py`
 
 ## BDI_Configuration
 
