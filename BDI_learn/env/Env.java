@@ -56,7 +56,7 @@ public class Env extends Environment {
             logger.log(Level.SEVERE, "Failed to start GatewayServer", e);
         }
 
-        // ---------- 新增：启动心跳线程 -----------
+        // ---------- Start the heartbeat thread -----------
         Thread delivery = new Thread(() -> {
             int count = 0;
             while (running) {
@@ -64,16 +64,16 @@ public class Env extends Environment {
                     System.out.println("Delivery start");
                     String lit = pendingPercepts.poll(100, TimeUnit.MILLISECONDS);
                     if (lit != null) {
-                        // 收到正常 newState，立刻“清零”超时计数
+                        // Receive a normal newState and immediately clear the timeout count
                         count = 0;
                         addPerceptFromString(lit);
                         System.out.println("Delivered added lit: " + lit);
                     } else {
-                        // 真正没有任何 newState，才加一次计数
+                        // The count is incremented only if there is no newState.
                         count++;
                         System.out.println("No percept this tick, count=" + count);
                         if (count > 5) {
-                            // 超过阈值，执行环境 reset
+                            // If the threshold is exceeded, the execution environment is reset
                             count = 0;
                             int initState = pyEnv.reset();
                             String resetLit = String.format("newState(%d,0.0,false)[source(percept)]", initState);
