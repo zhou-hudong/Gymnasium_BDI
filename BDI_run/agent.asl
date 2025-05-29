@@ -1,11 +1,11 @@
 
 
-/* 1. Configurazione */
+/* 1. Configuration */
 
 epsilon(0.1).
 
-name_game("FrozenLake-v1").
-//name_game("CliffWalking-v0").
+//name_game("FrozenLake-v1").
+name_game("CliffWalking-v0").
 //name_game("Taxi-v3").
 
 render_mode("human").
@@ -14,8 +14,8 @@ render_mode("human").
 max_episode_steps(100).
 episode_count(500).
 
-file("prova_lake.pkl").
-//file("prova_walk.pkl").
+//file("prova_lake.pkl").
+file("prova_walk.pkl").
 //file("prova_taxi.pkl").
 
 /* 2. Start */
