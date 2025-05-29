@@ -1,0 +1,17 @@
+/*
+
+    Jason Application File
+
+    Jason 3.3.0
+
+*/
+
+MAS app1 {
+
+    infrastructure: Local
+
+    environment: app1.env.Env
+
+    agents: agent_learn;
+
+}
