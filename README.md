@@ -98,6 +98,7 @@ To run the project correctly, make sure you have the following tools installed a
     # Clone the project
     git clone https://github.com/zhou-hudong/Gymnasium_BDI.git
     cd Gymnasium_BDI
+    cd BDI_run
     
     # Start Jason MAS Console
     jason app1.mas2j
@@ -111,25 +112,24 @@ To run the project correctly, make sure you have the following tools installed a
 Configuration is done in the ASL agent file (e.g., agent_learn.asl):
 
 ```java
-/* 1. Configurazione */
+/* 1. Configuration */
 learning_rate(0.1).
 discount_factor(0.2).
 epsilon(1).
 epsilon_decay(0.995).
 
-name_game("FrozenLake-v1").
+//name_game("FrozenLake-v1").
 //name_game("CliffWalking-v0").
+//name_game("Taxi-v3").
 
-//render_mode("human").
 render_mode("ansi").
 
-//max_episode_steps(10).
 max_episode_steps(100).
 
 episode_count(200).
 
-//file("prova_walk.pkl").
 file("prova_lake.pkl").
+//file("prova_walk.pkl").
 //file("prova_taxi.pkl").
 ```
 
@@ -139,6 +139,10 @@ file("prova_lake.pkl").
 - **FrozenLake** gives a reward of 1 only upon reaching the goal. All other events, including falling in holes, return 0.
 
 ## Struttura_Project
+
+**main folder：**
+  - **BDI_run** -> folder containing the normal run agent process
+  - **BDI_learn** -> folder to train the model
 
 **folder：**
   - **.gradle  .idea  build**  ->  sono 3 cartelle create automaticamente dai comandi gradle e jason
@@ -172,7 +176,7 @@ file("prova_lake.pkl").
 
 ## Note
 
-1. **Communication Delay**: You can see that in ansi mode, the learning speed was not very fast, it was because I added a sleep, To avoid communication blocking at high speed, if we remain in the same state over multiple steps, BDI considers the newState as already processed and therefore does not trigger the newState function or send a value back to Java.
+1. **Communication Delay in BDI_run drive_gym.py**: You can see that in ansi mode, the learning speed was not very fast, it was because I added a sleep, To avoid communication blocking at high speed, if we remain in the same state over multiple steps, BDI considers the newState as already processed and therefore does not trigger the newState function or send a value back to Java.
 This Sleep you can also add in JAVA, the important thing is to leave a reaction time
 **Python**
 ```python
@@ -189,4 +193,6 @@ def step(self, action: int):
      -qtable(S,A,R)[source(percept)].
    ```
 
-3. **Retraining Strategy**: Often you have to retrain the model, like in FrozenLake, if you are not lucky, it never reaches the goal in the first episodes, and in the program at each episode the value of ε-Greedy decreases, the lower the value, the less the agent focuses on discovering paths that could reach the goal.
+3. **Retraining Strategy in BDI_learn**: Often you have to retrain the model, like in FrozenLake, if you are not lucky, it never reaches the goal in the first episodes, and in the program at each episode the value of ε-Greedy decreases, the lower the value, the less the agent focuses on discovering paths that could reach the goal.
+
+4. **Observation** : Once training is finished in the **BDI_learn** folder, copy the resulting **.pkl** file into the **BDI_run** folder. The BDI_learn setup uses threads and queues to achieve high-speed learning, so it cannot support the slower “human” render mode reliably.
