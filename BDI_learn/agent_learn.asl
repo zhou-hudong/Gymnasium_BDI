@@ -56,7 +56,8 @@ file("prova_lake.pkl").
 
 +!run_episodes : episode_count(0) & file(F) <-
     executeAction(save_qtable, F);
-    .print("[BDI] All episodes completed").
+    .print("[BDI] All episodes completed");
+    executeAction(stop_thread).
 
 
 /* 6. start single episode */
