@@ -5,7 +5,7 @@ discount_factor(0.2).
 epsilon(1).
 epsilon_decay(0.995).
 
-//name_game("FrozenLake-v1").
+name_game("FrozenLake-v1").
 //name_game("CliffWalking-v0").
 //name_game("Taxi-v3").
 
