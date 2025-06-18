@@ -3,6 +3,8 @@ import gymnasium as gym
 import logging
 import time
 
+import pickle
+
 # Logger Configuration
 #logging.basicConfig(level=logging.INFO)
 #logging.getLogger('py4j').setLevel(logging.DEBUG)
@@ -15,14 +17,28 @@ class PythonServer:
         self.env = None
         self.render_mode = None
         self.Steps = 100
-        self.reward_scale = 1000
+        self.reward_scale = 100
         self.last_obs=0
         self.second_last_obs = None
 
+        # Metrics tracking
+        self.rewards_list = []  # 每集总奖励列表
+        self.current_reward = 0.0  # 当前 episode 累积奖励
+        self.start_time = None  # 训练开始时间
+        self.graph_name = None
+
     def initialize(self, env_name: str, render_mode: str, steps: str):
         """
-        initialize environment, and save render_mode and Steps
+        Initialize environment, record start time, reset metrics
         """
+
+        self.graph_name = env_name.replace('-', '_')
+
+        # Start metrics
+        self.start_time = time.time()
+        self.rewards_list = []
+        self.current_reward = 0.0
+
         self.render_mode = render_mode
         self.Steps = int(steps)
         if env_name == "FrozenLake-v1":
@@ -52,6 +68,14 @@ class PythonServer:
         #    print(self.env.render(), end="")
         self.last_obs = obs
         self.second_last_obs = None
+
+        # If a previous episode ended, record its reward
+        if self.start_time is not None and self.current_reward is not None:
+            # On first reset there's no previous episode
+            if len(self.rewards_list) > 0 or self.current_reward != 0:
+                self.rewards_list.append(self.current_reward)
+        self.current_reward = 0.0
+
         return int(obs)
 
     def step(self, action: int):
@@ -77,6 +101,9 @@ class PythonServer:
         # -2 when it rotates between two states
         if self.second_last_obs is not None and obs == self.second_last_obs:
             reward -= 2.0
+
+        # Update metrics
+        self.current_reward += reward
 
         self.second_last_obs = self.last_obs
         self.last_obs = obs
@@ -125,5 +152,15 @@ if __name__ == '__main__':
     except KeyboardInterrupt:
         pass
     finally:
+
+        # Training finished, save metrics
+        duration = time.time() - server.start_time
+        # append last episode reward
+        server.rewards_list.append(server.current_reward)
+        metrics_file = f"graph_{server.graph_name}.pkl"
+        with open(metrics_file, 'wb') as f:
+            pickle.dump({'rewards': server.rewards_list, 'duration': duration}, f)
+        print(f"[Python] Metrics saved to {metrics_file}")
+
         gateway.shutdown()
         print('[Python] Connection closed')

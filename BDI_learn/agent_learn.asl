@@ -5,9 +5,8 @@ discount_factor(0.2).
 epsilon(1).
 epsilon_decay(0.995).
 
-//name_game("FrozenLake-v1").
-name_game("CliffWalking-v0").
-//name_game("Taxi-v3").
+name_game("FrozenLake-v1").
+//name_game("CliffWalking-v0").
 
 render_mode("ansi").
 
@@ -15,9 +14,8 @@ max_episode_steps(100).
 
 episode_count(200).
 
-//file("prova_lake.pkl").
-file("prova_walk.pkl").
-//file("prova_taxi.pkl").
+file("prova_lake.pkl").
+//file("prova_walk.pkl").
 
 /* 2. Start */
 +start <-

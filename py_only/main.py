@@ -4,6 +4,8 @@
 # ---------------- Training/Evaluation Loop ----------------
 
 import os
+import time
+import pickle
 from config import *
 from enviroment import *
 from qtable import QTable
@@ -11,7 +13,10 @@ from agent import Agent
 
 
 def train(env: Environment, agent: Agent):
-    """Training mode: run multiple episodes and update Q-table"""
+    """Training mode: run multiple episodes and update Q-table, while recording each episode's rewards"""
+    rewards = []
+    start_time = time.time()  # Start timing
+
     for episode in range(1, NUM_EPISODES + 1):
         state = env.reset()
         total_reward = 0
@@ -29,6 +34,7 @@ def train(env: Environment, agent: Agent):
                 break
 
         agent.decay_epsilon()
+        rewards.append(total_reward)
 
         # Save Q-table regularly
         if episode % 50 == 0:
@@ -40,6 +46,13 @@ def train(env: Environment, agent: Agent):
     # Save after training is completed
     agent.qtable.save(QTABLE_FILE)
     print("Training completed, Q-table saved.")
+
+    # # Save graph: Contains the list of rewards for each episode and the total running time
+    duration = time.time() - start_time
+    with open(GRAPH_FILE, 'wb') as f:
+        pickle.dump({'rewards': rewards, 'duration': duration}, f)
+    print(f"Training completed in {duration:.2f}s, metrics saved to {GRAPH_FILE}")
+
 
 
 def evaluate(env: Environment, qtable: QTable):

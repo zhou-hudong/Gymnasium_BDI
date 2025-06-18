@@ -4,16 +4,16 @@
 # ---------------- Configuration parameters for Q-learning ----------------
 
 # Environment settings
-ENV_NAME = "CliffWalking-v0"    # Gymnasium Environment Name
-#ENV_NAME = "FrozenLake-v1"
-#RENDER_MODE = "ansi"            # Rendering mode: "human", "ansi", or "none"
-RENDER_MODE = "human"
+#ENV_NAME = "CliffWalking-v0"    # Gymnasium Environment Name
+ENV_NAME = "FrozenLake-v1"
+RENDER_MODE = "ansi"            # Rendering mode: "human", "ansi", or "none"
+#RENDER_MODE = "human"
 MAX_STEPS_PER_EPISODE = 100       # Maximum number of steps per episode
 
 # Training control
 # Whether to train (True: learn Q-table; False: only evaluate, load existing Q-table)
-#LEARN = True
-LEARN = False
+LEARN = True
+#LEARN = False
 NUM_EPISODES = 200                # Total Episodes
 
 # Learning parameters
@@ -27,5 +27,7 @@ MIN_EPSILON = 0.01                # ε minimum
 REWARD_SCALE = 100              # Reward amplification factor when reaching the goal
 
 # Checkpoint file
-QTABLE_FILE = "walk.pkl"      # Q-table name Save/load file
-#QTABLE_FILE = "lake.pkl"
+#QTABLE_FILE = "walk.pkl"      # Q-table name Save/load file
+QTABLE_FILE = "lake.pkl"
+
+GRAPH_FILE = f"graph_{QTABLE_FILE}"     #Store learning curve and running time
