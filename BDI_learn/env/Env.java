@@ -165,7 +165,7 @@ public class Env extends Environment {
                     addPerceptFromString(percept);*/
 
                     String lit = String.format("newState(%d,%.2f,%b)[source(percept)]", st, r, d);
-                    logger.fine("enqueue percept: " + lit + "，队列大小=" + pendingPercepts.size());
+                    logger.fine("enqueue percept: " + lit + "，queue size=" + pendingPercepts.size());
                     pendingPercepts.put(lit);
 
                     System.out.println("step_env finished");
@@ -235,7 +235,7 @@ public class Env extends Environment {
                 }
 
                 case "stop_thread": {
-                    // 终止 Delivery 线程循环
+                    // Terminate the Delivery thread loop
                     running = false;
                     System.out.println("[Java] Received stop_thread ➔ stopping Delivery thread");
                     return true;

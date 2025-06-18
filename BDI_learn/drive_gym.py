@@ -22,10 +22,10 @@ class PythonServer:
         self.second_last_obs = None
 
         # Metrics tracking
-        self.rewards_list = []  # 每集总奖励列表
-        self.current_reward = 0.0  # 当前 episode 累积奖励
-        self.start_time = None  # 训练开始时间
-        self.graph_name = None
+        self.rewards_list = []  # List of total rewards per episode
+        self.current_reward = 0.0  # The current episode's cumulative reward
+        self.start_time = None  # Training start time
+        self.graph_name = None  # graph file name
 
     def initialize(self, env_name: str, render_mode: str, steps: str):
         """
