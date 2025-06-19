@@ -15,44 +15,54 @@ def find_latest_metrics():
     if not files:
         raise FileNotFoundError('No graph_*.pkl files found in current directory')
     return max(files, key=os.path.getmtime)
-
+    # If you want to select a file, use this return and comment out the previous one
+    #return 'graph_FrozenLake_v1.pkl'
 
 def main():
-    # Determine metrics file path
+    # Determine metrics file
     if len(sys.argv) > 1:
         metrics_file = sys.argv[1]
     else:
         metrics_file = find_latest_metrics()
     print(f'Loading metrics from: {metrics_file}')
 
-    # Load metrics data
+    # Load data
     with open(metrics_file, 'rb') as f:
         data = pickle.load(f)
 
     rewards = data.get('rewards', [])
-    duration = data.get('duration', 0.0)
+    durations = data.get('durations', [])
+    total_duration = data.get('total_duration', 0.0)
 
     if not rewards:
-        print('No rewards data found in metrics file.')
+        print('No rewards data found.')
         return
 
-    # Plot raw rewards per episode
-    plt.figure()
-    plt.plot(range(1, len(rewards) + 1), rewards, alpha=0.3, label='Raw')
+    # Plot rewards and durations
+    fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(8, 6))
 
-    # Smooth curve via moving average
+    # Rewards subplot
+    ax1.plot(range(1, len(rewards)+1), rewards, alpha=0.3, label='Raw Rewards')
     window = min(20, len(rewards))
     if len(rewards) >= window:
-        smooth = np.convolve(rewards, np.ones(window)/window, mode='valid')
-        plt.plot(range(window, len(rewards) + 1), smooth, label=f'{window}-episode MA')
+        smooth_rewards = np.convolve(rewards, np.ones(window)/window, mode='valid')
+        ax1.plot(range(window, len(rewards)+1), smooth_rewards, label=f'{window}-episode MA')
+    ax1.set_ylabel('Reward')
+    ax1.legend()
+    ax1.grid(True)
 
-    # Formatting
-    plt.xlabel('Episode')
-    plt.ylabel('Total Reward')
-    plt.title(f'Jason+Py4J Learning Curve (Duration: {duration:.2f}s)')
-    plt.legend()
-    plt.grid(True)
-    plt.tight_layout()
+    # Durations subplot
+    ax2.plot(range(1, len(durations)+1), durations, alpha=0.3, label='Raw Duration')
+    if len(durations) >= window:
+        smooth_durations = np.convolve(durations, np.ones(window)/window, mode='valid')
+        ax2.plot(range(window, len(durations)+1), smooth_durations, label=f'{window}-episode MA')
+    ax2.set_xlabel('Episode')
+    ax2.set_ylabel('Duration (s)')
+    ax2.legend()
+    ax2.grid(True)
+
+    fig.suptitle(f'Jason-Py4j Learning Curve (Total time: {total_duration:.2f}s)')
+    fig.tight_layout(rect=[0, 0.03, 1, 0.95])
     plt.show()
 
 if __name__ == '__main__':

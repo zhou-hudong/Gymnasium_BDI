@@ -13,11 +13,13 @@ from agent import Agent
 
 
 def train(env: Environment, agent: Agent):
-    """Training mode: run multiple episodes and update Q-table, while recording each episode's rewards"""
+    """Training mode: run multiple episodes and update Q-table, while recording each episode's rewards and time"""
     rewards = []
+    durations = []
     start_time = time.time()  # Start timing
 
     for episode in range(1, NUM_EPISODES + 1):
+        ep_start = time.time()
         state = env.reset()
         total_reward = 0
 
@@ -35,6 +37,8 @@ def train(env: Environment, agent: Agent):
 
         agent.decay_epsilon()
         rewards.append(total_reward)
+        ep_duration = time.time() - ep_start
+        durations.append(ep_duration)
 
         # Save Q-table regularly
         if episode % 50 == 0:
@@ -48,10 +52,14 @@ def train(env: Environment, agent: Agent):
     print("Training completed, Q-table saved.")
 
     # # Save graph: Contains the list of rewards for each episode and the total running time
-    duration = time.time() - start_time
+    total_time = time.time() - start_time
     with open(GRAPH_FILE, 'wb') as f:
-        pickle.dump({'rewards': rewards, 'duration': duration}, f)
-    print(f"Training completed in {duration:.2f}s, metrics saved to {GRAPH_FILE}")
+        pickle.dump({
+            'rewards': rewards,
+            'durations': durations,  # <<— 写入每集时长列表
+            'total_time': total_time  # <<— 写入总训练时长
+        }, f)
+    print(f"Training completed in {total_time:.2f}s, metrics saved to {GRAPH_FILE}")
 
 
 

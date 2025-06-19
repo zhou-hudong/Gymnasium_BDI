@@ -23,7 +23,9 @@ class PythonServer:
 
         # Metrics tracking
         self.rewards_list = []  # List of total rewards per episode
+        self.durations_list = []  # List of durations per episode
         self.current_reward = 0.0  # The current episode's cumulative reward
+        self.episode_start = None  # Episode start time
         self.start_time = None  # Training start time
         self.graph_name = None  # graph file name
 
@@ -37,7 +39,9 @@ class PythonServer:
         # Start metrics
         self.start_time = time.time()
         self.rewards_list = []
+        self.durations_list = []
         self.current_reward = 0.0
+        self.episode_start = time.time()  # Begin first episode timer
 
         self.render_mode = render_mode
         self.Steps = int(steps)
@@ -63,9 +67,16 @@ class PythonServer:
         if self.env is None:
             raise RuntimeError("reset() called before initialize()")
         obs, _ = self.env.reset()
+
+        # Record duration of just-finished episode (if not first reset)
+        if self.episode_start is not None:
+            ep_duration = time.time() - self.episode_start
+            self.durations_list.append(ep_duration)
+
         # to print the "ansi" start text
         #if self.render_mode == "ansi":
         #    print(self.env.render(), end="")
+        self.episode_start = time.time()
         self.last_obs = obs
         self.second_last_obs = None
 
@@ -154,12 +165,12 @@ if __name__ == '__main__':
     finally:
 
         # Training finished, save metrics
-        duration = time.time() - server.start_time
+        total_duration = time.time() - server.start_time
         # append last episode reward
         server.rewards_list.append(server.current_reward)
         metrics_file = f"graph_{server.graph_name}.pkl"
         with open(metrics_file, 'wb') as f:
-            pickle.dump({'rewards': server.rewards_list, 'duration': duration}, f)
+            pickle.dump({'rewards': server.rewards_list, 'durations': server.durations_list, 'total_duration': total_duration}, f)
         print(f"[Python] Metrics saved to {metrics_file}")
 
         gateway.shutdown()
