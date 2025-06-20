@@ -178,7 +178,7 @@ file("prova_lake.pkl").
         FILE_PATH = "prova_lake.pkl"
       ```
 
-## Note
+## Notes
 
 1. **Using Thread in BDI_learn Env.java**: A separate thread was added to manage the interaction between the BDI agent and the Gymnasium environment during the learning phase (e.g., in `ansi` mode). Without this thread, a `sleep` would be required to prevent communication blocking at high speed.
 If the agent remains in the same state for multiple steps, the BDI system may assume that the `newState` has already been handled. As a result, it won't trigger the `newState` function again, nor will it send any updated value back.
