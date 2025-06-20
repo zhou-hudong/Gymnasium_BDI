@@ -183,13 +183,13 @@ file("prova_lake.pkl").
 1. **Using Thread in BDI_learn Env.java**: A separate thread was added to manage the interaction between the BDI agent and the Gymnasium environment during the learning phase (e.g., in `ansi` mode). Without this thread, a `sleep` would be required to prevent communication blocking at high speed.
 If the agent remains in the same state for multiple steps, the BDI system may assume that the `newState` has already been handled. As a result, it won't trigger the `newState` function again, nor will it send any updated value back.
 This sleep can also be added in Java — the important part is to allow some reaction time.
-**Python**
-```python
-def step(self, action: int):
-   ...
-   time.sleep(0.2)
-   ...
-```
+  **Python**
+  ```python
+  def step(self, action: int):
+     ...
+     time.sleep(0.2)
+     ...
+  ```
 
 2. **Q-Table Belief Persistence**: In Agent File, we have a conversion of Source[Percept], from Percept to Self, this conversion is to avoid the deletion of the Agent's Q-Table Belief by Java with "clearPercepts()"
    ```java
